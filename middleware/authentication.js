@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 // Middleware to check if user is logged in
 const isLoggedIn = (req, res, next) => {
@@ -10,11 +11,12 @@ const isLoggedIn = (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+  jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
     if (err) {
-      return res.status(403).json({ message: "Forbidden" });
+      return res.status(403).json({ message: "Forbidden: Wrong JWT Token" });
     }
-    req.user = user;
+    const foundUser = await User.findById(user._id);
+    req.user = foundUser;
     next();
   });
 };
@@ -49,6 +51,7 @@ const isTeacher = (req, res, next) => {
 
 // Middleware to check if user is a TA
 const isTA = (req, res, next) => {
+  console.log("ROLE:", req.user.role);
   if (
     req.user.role !== "TA" &&
     req.user.role !== "TEACHER" &&
