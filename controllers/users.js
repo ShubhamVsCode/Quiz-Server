@@ -2,6 +2,26 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const checkToken = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(404).json({ message: "Provide Access Token" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Decode token
+    const userId = decoded._id; // Extract user ID from decoded token
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json({ user });
+  } catch (err) {
+    console.error(err);
+    res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
 const getUser = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1]; // Extract token from Authorization header
@@ -189,6 +209,7 @@ const updateDetails = async (req, res) => {
 };
 
 module.exports = {
+  checkToken,
   getUser,
   login,
   register,

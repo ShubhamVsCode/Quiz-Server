@@ -7,10 +7,12 @@ const {
   getUser,
   searchUsers,
   updateDetails,
+  checkToken,
 } = require("../controllers/users");
 
 const router = express.Router();
 
+router.post("/checkToken", checkToken); // Route to get the current user
 router.get("/getUser", isLoggedIn, getUser); // Route to get the current user
 router.post("/register", register); // Register route
 router.post("/login", login); // Login route

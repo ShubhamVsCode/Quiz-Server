@@ -30,8 +30,13 @@ app.use(morgan("tiny"));
 const usersRouter = require("./routes/users");
 const quizRouter = require("./routes/quiz");
 
-app.use("/user", usersRouter);
-app.use("/quiz", quizRouter);
+function logBody(req, res, next) {
+  console.log(req?.body);
+  next();
+}
+
+app.use("/user", logBody, usersRouter);
+app.use("/quiz", logBody, quizRouter);
 
 // Start server
 app.listen(port, () => {
