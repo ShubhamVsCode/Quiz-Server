@@ -23,7 +23,11 @@ mongoose
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://quiz-shubham.netlify.app/",
+  })
+);
 app.use(morgan("tiny"));
 
 // Routes
