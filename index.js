@@ -35,8 +35,13 @@ function logBody(req, res, next) {
   next();
 }
 
-app.use("/user", logBody, usersRouter);
-app.use("/quiz", logBody, quizRouter);
+app.get("/", (req, res) => {
+  res.json({
+    message: "Welcome to Quiz API",
+  });
+});
+app.use("/user", usersRouter);
+app.use("/quiz", quizRouter);
 
 // Start server
 app.listen(port, () => {
