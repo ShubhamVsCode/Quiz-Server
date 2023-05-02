@@ -25,7 +25,7 @@ mongoose
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://quiz-shubham.netlify.app/",
+    origin: "https://quiz-shubham.netlify.app",
   })
 );
 app.use(morgan("tiny"));
