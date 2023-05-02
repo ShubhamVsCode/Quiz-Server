@@ -51,6 +51,25 @@ const createQuiz = async (req, res) => {
   }
 };
 
+const getAllQuiz = async (req, res) => {
+  const allQuizzes = await Quiz.find();
+  res.status(200).json(allQuizzes);
+};
+
+const getAQuiz = async (req, res) => {
+  try {
+    const quiz = await Quiz.findById(req.params.quizId);
+    return res.status(200).json(quiz);
+  } catch (error) {
+    return res.status(500).json({
+      message:
+        "Server Error on Finding Quiz by this id" + ", Error: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   createQuiz,
+  getAllQuiz,
+  getAQuiz,
 };
